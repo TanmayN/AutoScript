@@ -17,20 +17,24 @@ function getScripts() {
 }
 
 function listScripts() {
+	echo greenString("\nCURRENT AVAILABLE SCRIPTS\n");
+	echo greenString("\n-------------------------------\n");
+	echo greenString("AUTOSCRIPT v1.0") . " by TanmayN\n";
+	echo greenString("-------------------------------\n\n");
 	$scriptsData = getScripts();
 	$scriptsArray = explode("\n", $scriptsData);
 	foreach ($scriptsArray as $script) {
 		$script = explode(' <-> ', $script);
-		echo greenString("\n-------------------------------\n");
-		echo greenString("AUTOSCRIPT v1.0") . " by TanmayN";
-		$output = greenString("-------------------------------\n") . greenString("NAME: ") . $script[0] . "\n" . greenString("DESCRIPTION: ") . $script[1] . "\n" . greenString("URL: ") . $script[2] . "\n" . greenString("-------------------------------\n\n");
+		$output = greenString("-------------------------------\n") . greenString("- NAME: ") . $script[0] . "\n" . greenString("- DESCRIPTION: ") . $script[1] . "\n" . greenString("- URL: ") . $script[2] . "\n" . greenString("-------------------------------\n\n");
 		echo $output;
 	}
+	echo greenString("TO ADD MORE, EDIT YOUR SCRIPTS FILE\n\n");
 }
 
 function runScript($url) {
-	$out = shell_exec("/bin/bash -c `curl \"" . $url . "\"`");
-	return $out;
+	$out1 = shell_exec("wget -O temp.sh " . $url);
+	$out2 = shell_exec("chmod +x temp.sh && bash temp.sh");
+	return $out2;
 }
 
 function help($option = "") {
@@ -70,6 +74,9 @@ if (strcasecmp($argv[1], "run") == 0) {
 	$scriptsArray = explode(" <-> ", $scripts);
 	if (in_array($selected, $scriptsArray) || in_array("\n" . $selected, $scriptsArray)) {
 		$position = array_search($selected, $scriptsArray);
+		if (!$position) {
+			$position = array_search("\n" . $selected, $scriptsArray);
+		}
 		$newPosition = $position + 2;
 		$url = $scriptsArray[$newPosition];
 		echo greenString("\n-------------------------------\n");
@@ -77,19 +84,21 @@ if (strcasecmp($argv[1], "run") == 0) {
 		echo greenString("\n-------------------------------\n");
 		echo greenString("SCRIPT RUNNING\n");
 		echo runScript($url . "\n");
+		echo greenString("SCRIPT COMPLETED\n");
+		echo greenString("\n-------------------------------\n\n");
 	} else {
 		echo greenString("ERROR: ") . "Could not find that script, try: php autoscript.php list\n";
 	}
 } elseif (strcasecmp($argv[1], "list") == 0) {
-	echo greenString("\nCURRENT AVAILABLE SCRIPTS\n");
 	listScripts();
-	echo greenString("TO ADD MORE, EDIT YOUR SCRIPTS FILE\n\n");
 } elseif (strcasecmp($argv[1], "help") == 0) {
 	if (!isset($argv[2])) {
 		help();
 	} else {
 		help($argv[2]);
 	}
+} else {
+	echo greenString("ERROR: ") . "Could not find that option, try: " . greenString("php autoscript.php help\n");
 }
 
 ?>
