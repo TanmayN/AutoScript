@@ -1,6 +1,6 @@
 <?php
 // START CONFIGURATION, ENTER YOUR VARIABLES HERE
-$scriptsFile = array("http://tanmayn.com/scripts.txt"); //Local files also suppported
+$scriptsFiles = array("http://tanmayn.com/scripts.txt"); //Local files also suppported
 // END CONFIGURATION
 
 // Makes a string green... yeah
@@ -12,9 +12,11 @@ function greenString($string) {
 // Downloads the scripts sources file
 function getScripts() {
 	global $scriptsFiles;
-	// TODO: Multiple scripts sources
-	foreach ($scriptsFiles as $scriptsFile) {
-		$data .= file_get_contents($scriptsFile) . "\n";	
+	// Initialize the data variable
+	$data = "";
+	foreach ($scriptsFiles as $file) {
+		// Compile the list of scripts
+		$data .= file_get_contents($file) . "\n";	
 	}
 	return $data;	
 }
@@ -31,15 +33,18 @@ function listScripts() {
 	$scriptsArray = explode("\n", $scriptsData);
 	// Display the name, description and URL of each script
 	foreach ($scriptsArray as $script) {
-		// Explode the line into an array
-		$script = explode(' <-> ', $script);
-		// This line is less retarded now
-		$output = greenString("-------------------------------") .
-		"\n" . greenString("- NAME: ") . $script[0] . 
-		"\n" . greenString("- DESCRIPTION: ") . $script[1] . 
-		"\n" . greenString("- URL: ") . $script[2] .
-		"\n" . greenString("-------------------------------\n\n");
-		echo $output;
+		// If the line does actually exist and isn't just a newline
+		if (isset($script[1])) {
+			// Explode the line into an array
+			$script = explode(' <-> ', $script);
+			// This line is less retarded now
+			$output = greenString("-------------------------------") .
+			"\n" . greenString("- NAME: ") . $script[0] . 
+			"\n" . greenString("- DESCRIPTION: ") . $script[1] . 
+			"\n" . greenString("- URL: ") . $script[2] .
+			"\n" . greenString("-------------------------------\n\n");
+			echo $output;
+		}
 	}
 	echo greenString("TO ADD MORE, EDIT YOUR SCRIPTS FILE\n\n");
 }
