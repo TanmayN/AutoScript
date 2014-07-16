@@ -1,8 +1,7 @@
 <?php
 // START CONFIGURATION, ENTER YOUR VARIABLES HERE
-$scriptsFile = "http://tanmayn.com/scripts.txt"; //Local files also suppported
+$scriptsFile = array("http://tanmayn.com/scripts.txt"); //Local files also suppported
 // END CONFIGURATION
-// TODO: Make this less fucking ugly
 
 // Makes a string green... yeah
 function greenString($string) {
@@ -12,9 +11,11 @@ function greenString($string) {
 
 // Downloads the scripts sources file
 function getScripts() {
-	global $scriptsFile;
+	global $scriptsFiles;
 	// TODO: Multiple scripts sources
-	$data = file_get_contents($scriptsFile);
+	foreach ($scriptsFiles as $scriptsFile) {
+		$data .= file_get_contents($scriptsFile) . "\n";	
+	}
 	return $data;	
 }
 
@@ -32,8 +33,12 @@ function listScripts() {
 	foreach ($scriptsArray as $script) {
 		// Explode the line into an array
 		$script = explode(' <-> ', $script);
-		// TODO: this line is ugly as fuck
-		$output = greenString("-------------------------------\n") . greenString("- NAME: ") . $script[0] . "\n" . greenString("- DESCRIPTION: ") . $script[1] . "\n" . greenString("- URL: ") . $script[2] . "\n" . greenString("-------------------------------\n\n");
+		// This line is less retarded now
+		$output = greenString("-------------------------------") .
+		"\n" . greenString("- NAME: ") . $script[0] . 
+		"\n" . greenString("- DESCRIPTION: ") . $script[1] . 
+		"\n" . greenString("- URL: ") . $script[2] .
+		"\n" . greenString("-------------------------------\n\n");
 		echo $output;
 	}
 	echo greenString("TO ADD MORE, EDIT YOUR SCRIPTS FILE\n\n");
