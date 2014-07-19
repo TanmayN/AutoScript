@@ -95,12 +95,14 @@ function help($option = "") {
 	
 	// List of available help topics
 	$availableOptions = array( 'run' => 'runs a remote script',
-							   'download' => 'download a script to pwd but don\'t run it, useful for scripts that need command line parameters.',
+							   'download' => 'download a script to pwd but don\'t run it, useful for scripts that need command line parameters',
+							   'search' => 'search the list of scripts for a specific one',
 					           'list' => 'list all available scripts',
 					           'help' => 'shows help');
 	// All their syntaxes (required for now, I'll fix it later)
 	$optionsSyntaxes = array( 'run' => 'php autoscript.php run <script>',
 							  'download' => 'php autoscript.php download <script>',
+							  'search' => 'php autoscript.php search <query>',
 							  'list' => 'php autoscript.php list',
 							  'help' => 'php autoscript.php help [option]');
 	
@@ -111,6 +113,7 @@ function help($option = "") {
 	if ($option == "") {
 		echo "- " . greenString("run") . " - run a script\n";
 		echo "- " . greenString("download") . " - download a script but don't run it\n";
+		echo "- " . greenString("search") . " - search the list of scripts\n";
 		echo "- " . greenString("list") . " -  list all current scripts\n";
 		echo "- " . greenString("help") . " -  show help and version\n";
 		echo greenString("\n-------------------------------\n");
