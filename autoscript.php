@@ -210,17 +210,22 @@ if (strcasecmp($argv[1], "run") == 0) {
 		echo greenString("ERROR: ") . "Could not find that script, try: php autoscript.php list\n";
 	}
 } elseif (strcasecmp($argv[1], "search") == 0) {
+	// Run the list command from command line and grep the output
 	$out = shell_exec("php autoscript.php list | grep -i '" . $argv[2] . "'");
 	echo greenString("\n-------------------------------\n");
 	echo greenString("AUTOSCRIPT v1.0") . " by TanmayN";
 	echo greenString("\n-------------------------------\n");
+	// If grep returns nothing
 	if (empty($out)) {
 		echo greenString("ERROR: ") . "Script not found\n";
 	} else {
 		echo $out;
+		// Cut it into an array
 		$outArray = explode("\n", $out);
+		// Count
 		$outNum = count($outArray);
 		for ($i = 0; $i == $outNum; $i + 3) {
+			// TODO: Organize this
 			echo $outArray[$i];
 		}
 	}
